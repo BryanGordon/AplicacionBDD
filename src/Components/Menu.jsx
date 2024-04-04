@@ -1,25 +1,25 @@
-import React,{useEffect,useState} from "react";
-import { Link,useNavigate } from "react-router-dom";
-import { auth } from "../firebaseconfig";
-export const Menu=()=>{
+import React,{ useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { auth } from '../firebaseconfig'
 
-    const historial=useNavigate()
-    const [usuario,setUsuario]=useState(null)
-    useEffect(()=>{
-        auth.onAuthStateChanged((user)=>{
-            if(user){
-                setUsuario(user.email)
-                console.log(user.email)
-            }
-        })
-    },[])
+export const Menu = () => {
+    const historial = useNavigate()
+    const [usuario,setUsuario] = useState(null)
 
-    const CerrarSesion=()=>{
+    const CerrarSesion = () => {
         auth.signOut()
         setUsuario(null)
         historial('/')
     }
 
+    useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            if(user) {
+                setUsuario(user.email)
+                console.log(user.email)
+            }
+        })
+    }, [])
 
     return(
         <div>
@@ -30,7 +30,8 @@ export const Menu=()=>{
                     </li>
                     <li className='nav-item'>
                         {
-                            usuario?
+                            usuario
+                            ?
                             (
                                <span></span>
                             )
@@ -39,11 +40,11 @@ export const Menu=()=>{
                                 <Link className='nav-link' to="/login">Login</Link>
                             )
                         }
-    
                     </li>
                     <li className='nav-item'>
                     {
-                            usuario?
+                            usuario
+                            ?
                             (
                                <span></span>
                             )
@@ -51,16 +52,17 @@ export const Menu=()=>{
                             (
                                 <Link className='nav-link' to="/admin">Admin</Link>
                             )
-                        }
+                    }
                     </li>
                 </ul>
                 {
-                    usuario?
+                    usuario
+                    ?
                     (
                         <button className='btn btn-danger'
                             onClick={CerrarSesion}
                         >
-                            Cerrar sesion
+                        Cerrar sesion
                         </button>
                     )
                     :
@@ -70,5 +72,5 @@ export const Menu=()=>{
                 }
             </nav>
         </div>
-    );
+    )
 }

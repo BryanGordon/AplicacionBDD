@@ -1,42 +1,38 @@
-import React,{useEffect,useState} from "react";
-import { auth } from "../firebaseconfig";
-import {useNavigate} from 'react-router-dom'
+import React, { useState } from 'react'
+import { auth } from '../firebaseconfig'
+import { useNavigate } from 'react-router-dom'
 
-export const Login=()=>{
+export const Login = () => {
+    const [email, setEmail] = useState('')
+    const [password, setpassword] = useState('')
+    const [msgerror,setMsgerror] = useState(null)
+    const historial = useNavigate()
 
-    const [email, setEmail]=useState('')
-    const [password, setpassword]=useState('')
-    const [msgerror,setMsgerror]=useState(null)
-    const historial= useNavigate()
-
-    const registrarUsuario=(e)=>{
+    const registrarUsuario = (e) => {
         e.preventDefault()
         auth.createUserWithEmailAndPassword(email,password)
             
-        .then(r=>{
+        .then(r => {
             historial('/')
         })
-        .catch(e=>{
-             //'auth/invalid-email'//
-             if(e.code==='auth/invalid-email'){
+        .catch(e => {
+            if(e.code === 'auth/invalid-email') {
                 setMsgerror('El email es incorrecto.')
-             }
-            //'auth/weak-password'//
-            if(e.code==='auth/weak-password'){
+            }
+            if(e.code === 'auth/weak-password') {
                 setMsgerror('La contraseña debe tener 6 caracteres o mas.')
             }
         })
            
     }
 
-    const LoginUsuario=()=>{
+    const LoginUsuario = () => {
         auth.signInWithEmailAndPassword(email,password)
-        .then((r)=>{
+        .then((r) => {
             historial('/')
         })
-        .catch((err)=>{
-            //'auth/wrong-password'//
-            if(err.code==='auth/wrong-password'){
+        .catch((err) => {
+            if(err.code === 'auth/wrong-password') {
                 setMsgerror('La contraseña no es correcta')
             }
             console.log(err)
@@ -45,17 +41,17 @@ export const Login=()=>{
 
     return(
         <div className='row mt-5'>
-            <div className='col'></div>
+            <div className='col'/>
             <div className='col'>
                 <form onSubmit={registrarUsuario} className='form-group'>
                     <input
-                        onChange={(e)=>{setEmail(e.target.value)}}
+                        onChange={(e) => {setEmail(e.target.value)}}
                         className='form-control'
                         placeholder="Introduce el correo"
                         type="email"
                     />
                     <input
-                        onChange={(e)=>{setpassword(e.target.value)}}
+                        onChange={(e) => {setpassword(e.target.value)}}
                         className='form-control mt-4'
                         placeholder="Introduce la contraseña"
                         type="password"
@@ -72,7 +68,8 @@ export const Login=()=>{
                     Iniciar sesion
                 </button>
                 {
-                    msgerror !=null?
+                    msgerror != null 
+                    ?
                     (
                      <di>
                         {msgerror}
@@ -86,7 +83,7 @@ export const Login=()=>{
                     )
                 }               
             </div>
-            <div className='col'></div>
+            <div className='col'/>
         </div>
-    );
+    )
 }
